@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/avrabe/CarND-PID-Control-Project.svg?branch=master)](https://travis-ci.org/avrabe/CarND-PID-Control-Project)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a4cff6f70769437da7a09e998a131d26)](https://www.codacy.com/app/avrabe/CarND-PID-Control-Project?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=avrabe/CarND-PID-Control-Project&amp;utm_campaign=Badge_Grade)
+
 # CarND-Controls-PID
 Self-Driving Car Engineer Nanodegree Program
 
