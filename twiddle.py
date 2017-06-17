@@ -1,14 +1,22 @@
 import os
+import subprocess
 
 
 def start_simulator():
     os.system("twiddle\start_pid_simulator.exe")
 
-count = 0
 def run(p):
-    global count
-    count += 1
-    return 1-0.05*count
+    proc = subprocess.Popen(["build/pid",
+                             "-p", str(p[0]),
+                             "-i", str(p[1]),
+                             "-d", str(p[2]),
+                             "-t", "120"], stdout=subprocess.PIPE, shell=False)
+    (out, err) = proc.communicate()
+    err = 0
+    for i in out.splitlines():
+        if b"Total Error:" in i:
+            err = float(i[12:])
+    return err
 
 def twiddle(tol=0.2):
     p = [0, 0, 0]
