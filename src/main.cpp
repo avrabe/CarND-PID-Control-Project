@@ -1,8 +1,9 @@
 #include <uWS/uWS.h>
-#include <iostream>
 #include "json.hpp"
 #include "PID.h"
-#include <math.h>
+
+using namespace std;
+
 
 // for convenience
 using json = nlohmann::json;
@@ -28,11 +29,48 @@ std::string hasData(std::string s) {
   return "";
 }
 
-int main()
+
+int main(int argc, char **argv)
 {
   uWS::Hub h;
 
   PID pid;
+
+
+  int opt;
+  double_t p = 1.0;
+  double_t i = 1.0;
+  double_t d = 1.0;
+  uint64_t time_s = 0;
+
+  while ((opt = getopt(argc, argv, "p:i:d:t:")) != EOF)
+    switch (opt) {
+      case 'p':
+        p = atof(optarg);
+            break;
+      case 'i':
+        i = atof(optarg);
+            break;
+      case 'd':
+        d = atof(optarg);
+            break;
+      case 't':
+        time_s = atoi(optarg);
+            break;
+      case '?':
+        fprintf(stderr, "usuage is \n -a : for enabling a \n -b : for enabling b \n -c: <value> ");
+      default:
+        cout << endl;
+            abort();
+    }
+  cout << "pid " << p << ", " << i << ", " << d << endl;
+  if (time_s == 0) {
+    cout << "not timeboxed" << endl;
+  } else {
+    cout << "limit to " << time_s << " seconds." << endl;
+  }
+
+  pid.Init(p, i, d);
   // TODO: Initialize the pid variable.
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
@@ -50,7 +88,7 @@ int main()
           double cte = std::stod(j[1]["cte"].get<std::string>());
           double speed = std::stod(j[1]["speed"].get<std::string>());
           double angle = std::stod(j[1]["steering_angle"].get<std::string>());
-          double steer_value;
+          double steer_value = -0.1;
           /*
           * TODO: Calcuate steering value here, remember the steering value is
           * [-1, 1].
