@@ -1,9 +1,14 @@
 #include <cmath>
+#include <iostream>
 
 #ifndef PID_H
 #define PID_H
 
 class PID {
+private:
+    bool is_p_error_initialized;
+    double_t total_error;
+    uint64_t number_of_steps;
 public:
     /*
     * Errors
@@ -43,6 +48,8 @@ public:
     * Calculate the total PID error.
     */
     double TotalError();
+
+    double Step(double speed, double angle);
 };
 
 #endif /* PID_H */

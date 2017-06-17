@@ -8,10 +8,6 @@ using namespace std;
 // for convenience
 using json = nlohmann::json;
 
-// For converting back and forth between radians and degrees.
-constexpr double pi() { return M_PI; }
-double deg2rad(double x) { return x * pi() / 180; }
-double rad2deg(double x) { return x * 180 / pi(); }
 
 // Checks if the SocketIO event has JSON data.
 // If there is data the JSON object in string format will be returned,
@@ -29,6 +25,10 @@ std::string hasData(std::string s) {
   return "";
 }
 
+typedef std::chrono::high_resolution_clock Time;
+typedef std::chrono::duration<float> fsec;
+auto t0 = Time::now();
+uint64_t time_s = 0;
 
 int main(int argc, char **argv)
 {
@@ -41,7 +41,6 @@ int main(int argc, char **argv)
   double_t p = 1.0;
   double_t i = 1.0;
   double_t d = 1.0;
-  uint64_t time_s = 0;
 
   while ((opt = getopt(argc, argv, "p:i:d:t:")) != EOF)
     switch (opt) {
@@ -88,16 +87,20 @@ int main(int argc, char **argv)
           double cte = std::stod(j[1]["cte"].get<std::string>());
           double speed = std::stod(j[1]["speed"].get<std::string>());
           double angle = std::stod(j[1]["steering_angle"].get<std::string>());
-          double steer_value = -0.1;
+            double steer_value = 0.0;
           /*
           * TODO: Calcuate steering value here, remember the steering value is
           * [-1, 1].
           * NOTE: Feel free to play around with the throttle and speed. Maybe use
           * another PID controller to control the speed!
           */
-          
+            pid.UpdateError(cte);
+            steer_value = pid.Step(speed, angle);
+
           // DEBUG
           std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;
+            std::cout << "Total Error: " << pid.TotalError() << std::endl;
+
 
           json msgJson;
           msgJson["steering_angle"] = steer_value;
@@ -105,6 +108,14 @@ int main(int argc, char **argv)
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
           std::cout << msg << std::endl;
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
+
+            auto t1 = Time::now();
+            fsec fs = t1 - t0;
+            std::cout << fs.count() << "s\n";
+            if (time_s > 0 && fs.count() > time_s) {
+                exit(0);
+            }
+
         }
       } else {
         // Manual driving
