@@ -1,12 +1,13 @@
 import os
+import os.path
 import subprocess
 
 
 def start_simulator():
-    os.system("twiddle\start_pid_simulator.exe")
+    os.system("/mnt/c/Users/Ralf/git/CarND-PID-Control-Project/twiddle/start_pid_simulator.exe")
 
 def run(p):
-    proc = subprocess.Popen(["build/pid",
+    proc = subprocess.Popen([os.path.join("build","pid"),
                              "-p", str(p[0]),
                              "-i", str(p[1]),
                              "-d", str(p[2]),
