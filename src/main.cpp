@@ -39,9 +39,9 @@ int main(int argc, char **argv)
 
   int opt;
 //[8.513539853479008, 11.360939714815208, 2.0945381689000024]
-  double_t p = 8.513539853479008;
-  double_t i = 11.360939714815208;
-  double_t d = 2.0945381689000024;
+  double_t p = 12;
+  double_t i = 800;
+  double_t d = 0;
 
     while ((opt = getopt(argc, argv, "p:i:d:t:")) != EOF) {
     switch (opt) {
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
 
           json msgJson;
           msgJson["steering_angle"] = steer_value;
-          msgJson["throttle"] = 0.2-0.19*abs(steer_value);
+          msgJson["throttle"] = 0.5-0.49*abs(steer_value);
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
           std::cout << msg << std::endl;
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
