@@ -43,7 +43,7 @@ int main(int argc, char **argv)
   double_t i = 11.360939714815208;
   double_t d = 2.0945381689000024;
 
-  while ((opt = getopt(argc, argv, "p:i:d:t:")) != EOF)
+    while ((opt = getopt(argc, argv, "p:i:d:t:")) != EOF) {
     switch (opt) {
       case 'p':
         p = atof(optarg);
@@ -62,6 +62,7 @@ int main(int argc, char **argv)
       default:
         cout << endl;
             abort();
+    }
     }
   cout << "pid " << p << ", " << i << ", " << d << endl;
   if (time_s == 0) {

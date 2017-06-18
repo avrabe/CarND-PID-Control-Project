@@ -9,6 +9,8 @@ private:
     bool is_p_error_initialized;
     double_t total_error;
     uint64_t number_of_steps;
+    double max_steering_angle;
+
 public:
     /*
     * Errors
@@ -49,6 +51,9 @@ public:
     */
     double TotalError();
 
+    /*
+     * Calculate the steering angle based on the current step.
+     */
     double Step(double speed, double angle);
 };
 
