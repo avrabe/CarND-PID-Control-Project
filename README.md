@@ -78,7 +78,7 @@ total error using the manual parameters. As of this I finally
 chose p = 12, i = 800 and d = 0.
 
 In the final implementation I updated the throttle by
-throttle of 0.5 - 0.49 * abs( calculated new steering value )
+throttle of 0.4 - 0.39 * abs( calculated new steering value )
 to enable the car to drive the lap faster. This increases the
 total error from 0.0657949 to 0.19. Since the car does not
 drive onto the ledges and can drive up to 48km/h I still
